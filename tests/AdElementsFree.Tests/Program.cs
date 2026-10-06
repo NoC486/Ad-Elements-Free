@@ -30,7 +30,13 @@ foreach (var url in new[] { "ws://localhost:9222/devtools/page/abc", "ws://evil.
     Check(!KookIdentity.IsSocket(url, 9222), "Reject untrusted socket " + url);
 Check(KookIdentity.IsPage("https://www.kookapp.cn/app/main", "C:\\KOOK\\KOOK.exe"), "KOOK web page");
 Check(KookIdentity.IsPage("http://localhost:5890/app/index.html", "C:\\KOOK\\KOOK.exe"), "KOOK local renderer");
-foreach (var url in new[] { "https://evil.test/app/", "https://kookapp.cn.evil.test/app/", "http://localhost:9000/app/", "https://www.kookapp.cn/login", "file:///C:/elsewhere/app/index.html" })
+foreach (var host in new[] { "localhost", "127.0.0.1" })
+    foreach (var port in new[] { 1, 80, 5888, 5890, 9000, 49152, 65535 })
+        Check(KookIdentity.IsPage($"http://{host}:{port}/app/discover", "C:\\KOOK\\KOOK.exe"), "Accept verified renderer variant " + host + ":" + port);
+Check(KookIdentity.IsPage("http://localhost:54321/app/discover?tab=home#list", "C:\\KOOK\\KOOK.exe"), "Dynamic renderer URL allows query and fragment");
+foreach (var url in new[] { "http://evil.test:5888/app/discover", "http://localhost.evil.test:5888/app/discover", "http://user@localhost:5888/app/discover", "http://localhost:5888/login", "http://localhost:54321/other/app/discover", "http://localhost:54321/application/", "http://localhost:54321/app", "http://localhost:54321/login?next=/app/", "http://localhost:0/app/", "http://localhost:65536/app/", "http://192.168.1.2:54321/app/" })
+    Check(!KookIdentity.IsPage(url, "C:\\KOOK\\KOOK.exe"), "Reject unrelated or invalid renderer page " + url);
+foreach (var url in new[] { "https://evil.test/app/", "https://kookapp.cn.evil.test/app/", "https://www.kookapp.cn/login", "file:///C:/elsewhere/app/index.html" })
     Check(!KookIdentity.IsPage(url, "C:\\KOOK\\KOOK.exe"), "Reject unrelated page " + url);
 var temp = Path.Combine(AppContext.BaseDirectory, "aef-test-" + Guid.NewGuid() + ".json");
 try

@@ -27,7 +27,11 @@ public static class KookIdentity
         if (uri.UserInfo.Length > 0) return false;
         if (uri.Scheme == "https" && uri.IsDefaultPort)
             return new[] { "kookapp.cn", "www.kookapp.cn", "kaiheila.cn", "www.kaiheila.cn" }.Contains(uri.Host, StringComparer.OrdinalIgnoreCase);
-        if (uri.Scheme == "http") return (uri.Host == "localhost" || uri.Host == "127.0.0.1") && uri.Port == 5890;
+        // Read the renderer's actual URL from the verified KOOK CDP target list.
+        // Its local page-server port can vary independently of the CDP port.
+        if (uri.Scheme == "http") return (uri.Host == "localhost" || uri.Host == "127.0.0.1")
+            && uri.Port is >= 1 and <= 65535
+            && uri.AbsolutePath.StartsWith("/app/", StringComparison.Ordinal);
         if (uri.IsFile && !uri.IsUnc)
         {
             var root = Path.GetFullPath(Path.GetDirectoryName(executable)!) + Path.DirectorySeparatorChar;

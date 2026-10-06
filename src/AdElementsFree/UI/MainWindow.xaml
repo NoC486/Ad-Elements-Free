@@ -1,11 +1,14 @@
 <Window x:Class="AdElementsFree.UI.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
- xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Ad Elements Free" Width="620" Height="400"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Ad Elements Free" Width="620" Height="440"
  MinWidth="480" MinHeight="340" WindowStartupLocation="CenterScreen" Background="#F5F6F8"
  Icon="pack://application:,,,/AdElementsFree;component/Assets/App.ico">
  <Grid Margin="28">
   <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-  <StackPanel><TextBlock Text="Ad Elements Free" FontSize="27" FontWeight="SemiBold"/>
-   <TextBlock Text="桌面应用广告元素管理" Margin="0,6,0,22" Foreground="#666666"/></StackPanel>
+  <DockPanel>
+   <Button DockPanel.Dock="Right" Content="设置" Click="OpenSettings" Padding="16,7" VerticalAlignment="Top"/>
+   <StackPanel><TextBlock Text="Ad Elements Free" FontSize="27" FontWeight="SemiBold"/>
+    <TextBlock Text="桌面应用广告元素管理" Margin="0,6,0,22" Foreground="#666666"/></StackPanel>
+  </DockPanel>
   <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
    <ItemsControl x:Name="ProviderList"><ItemsControl.ItemTemplate><DataTemplate>
     <Border Background="White" BorderBrush="#E0E3E9" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,12">
@@ -16,6 +19,12 @@
     </Border>
    </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
   </ScrollViewer>
-  <TextBlock Grid.Row="2" Text="关闭窗口后仍在托盘运行。请通过托盘菜单退出。" Foreground="#777777" Margin="0,16,0,0" TextWrapping="Wrap"/>
+  <StackPanel Grid.Row="2" Margin="0,16,0,0">
+   <TextBlock Text="关闭窗口后仍在托盘运行。请通过托盘菜单退出。" Foreground="#777777" TextWrapping="Wrap"/>
+   <TextBlock Margin="0,10,0,0" Foreground="#666666" TextWrapping="Wrap">
+    <Run x:Name="VersionLabel"/><Run Text=" · 作者 "/><Hyperlink NavigateUri="https://github.com/NoC486" RequestNavigate="NavigateLink">NoC486</Hyperlink>
+    <Run Text="  ·  "/><Hyperlink NavigateUri="https://github.com/NoC486/Ad-Elements-Free" RequestNavigate="NavigateLink" ToolTip="https://github.com/NoC486/Ad-Elements-Free">GitHub 仓库 ↗</Hyperlink>
+   </TextBlock>
+  </StackPanel>
  </Grid>
 </Window>

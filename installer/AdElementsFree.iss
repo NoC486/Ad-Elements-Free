@@ -1,5 +1,5 @@
 #ifndef AppVersion
-  #define AppVersion "0.1.1"
+  #define AppVersion "0.2.0"
 #endif
 #define AppName "Ad Elements Free"
 #define AppId "AdElementsFree.NoC486"
@@ -85,6 +85,18 @@ function InitializeUninstall(): Boolean;
 begin
   Result := True;
   if not UninstallSilent then
-    Result := MsgBox('Before uninstalling, turn OFF all providers in Ad Elements Free to restore the shortcuts it changed, then exit the app from the system tray.' + #13#10 + #13#10 +
+    Result := MsgBox('Before uninstalling, disable startup in Settings and turn OFF all providers in Ad Elements Free to restore the shortcuts it changed, then exit the app from the system tray.' + #13#10 + #13#10 +
       'Settings, logs and shortcut recovery records in your Local AppData folder will be preserved. Continue uninstalling?', mbConfirmation, MB_YESNO) = IDYES;
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+  Command: String;
+begin
+#ifndef TestBuild
+  if CurUninstallStep = usUninstall then
+    if RegQueryStringValue(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', 'AdElementsFree', Command) then
+      if CompareText(Command, '"' + ExpandConstant('{app}\AdElementsFree.exe') + '" --startup') = 0 then
+        RegDeleteValue(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', 'AdElementsFree');
+#endif
 end;

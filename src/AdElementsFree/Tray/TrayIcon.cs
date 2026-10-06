@@ -8,7 +8,7 @@ public sealed class TrayIcon : IDisposable
     private readonly NotifyIcon icon;
     private readonly Icon trayImage;
     private bool disposed;
-    public TrayIcon(Action open, Action exit)
+    public TrayIcon(Action open, Action exit, Action? settings = null)
     {
         using var stream = typeof(TrayIcon).Assembly.GetManifestResourceStream("AdElementsFree.Assets.App.ico")
             ?? throw new InvalidOperationException("Application icon resource is missing.");
@@ -16,6 +16,7 @@ public sealed class TrayIcon : IDisposable
         trayImage = (Icon)source.Clone();
         var menu = new ContextMenuStrip();
         menu.Items.Add("打开 Ad Elements Free", null, (_, _) => open());
+        if (settings != null) menu.Items.Add("设置", null, (_, _) => settings());
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add("退出", null, (_, _) => exit());
         icon = new NotifyIcon { Text = "Ad Elements Free", Icon = trayImage, ContextMenuStrip = menu, Visible = true };

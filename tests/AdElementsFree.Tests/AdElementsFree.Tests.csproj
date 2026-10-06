@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0-windows</TargetFramework></PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../src/AdElementsFree/Settings/StartupRegistration.cs" Link="StartupRegistration.cs" />
+    <Compile Include="../../src/AdElementsFree/Updates/UpdateChecker.cs" Link="UpdateChecker.cs" />
     <Compile Include="../../src/AdElementsFree/Shortcuts/WindowsArguments.cs" Link="WindowsArguments.cs" />
     <Compile Include="../../src/AdElementsFree/Settings/JsonStore.cs" Link="JsonStore.cs" />
     <Compile Include="../../src/AdElementsFree/Monitoring/*.cs" Link="Monitoring/%(Filename).cs" />

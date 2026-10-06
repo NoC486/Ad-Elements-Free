@@ -1,0 +1,19 @@
+<Window x:Class="AdElementsFree.UI.SettingsWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="设置 · Ad Elements Free" Width="510" Height="420"
+ ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Background="#F5F6F8"
+ Icon="pack://application:,,,/AdElementsFree;component/Assets/App.ico">
+ <StackPanel Margin="28">
+  <TextBlock Text="设置" FontSize="25" FontWeight="SemiBold" Margin="0,0,0,22"/>
+  <CheckBox x:Name="StartupBox" Content="开机自启" FontSize="15" Click="ChangeStartup"/>
+  <TextBlock Text="登录 Windows 后在托盘运行，仅对当前用户生效。" Foreground="#666666" Margin="0,8,0,0"/>
+  <TextBlock Text="默认关闭；如果已在 Windows 启动应用中禁用，请在那里重新启用。" TextWrapping="Wrap" Foreground="#666666" Margin="0,4,0,0"/>
+  <TextBlock x:Name="StartupStatus" TextWrapping="Wrap" Foreground="#454B55" Margin="0,8,0,20"/>
+  <Separator/>
+  <DockPanel Margin="0,16,0,12">
+   <Button x:Name="CheckButton" DockPanel.Dock="Right" Content="检查更新" Padding="14,7" Click="CheckUpdates"/>
+   <TextBlock x:Name="VersionText" VerticalAlignment="Center" FontSize="14"/>
+  </DockPanel>
+  <TextBlock x:Name="UpdateStatus" Text="手动检查 GitHub 最新正式版，不会自动下载或安装。" TextWrapping="Wrap" Foreground="#454B55"/>
+  <TextBlock x:Name="ReleaseLinkText" Visibility="Collapsed" Margin="0,10,0,0"><Hyperlink Click="OpenRelease">前往 GitHub 下载新版 →</Hyperlink></TextBlock>
+ </StackPanel>
+</Window>

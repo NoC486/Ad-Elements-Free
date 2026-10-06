@@ -22,7 +22,7 @@ public partial class App : Application
     {
         base.OnStartup(e);
         singleton = new Mutex(true, "Local\\AdElementsFree", out bool first);
-        if (!first) { MessageBox.Show("Ad Elements Free 已在运行，请从系统托盘打开。", "Ad Elements Free"); Shutdown(); return; }
+        if (!first) { if (!e.Args.Contains("--startup")) MessageBox.Show("Ad Elements Free 已在运行，请从系统托盘打开。", "Ad Elements Free"); Shutdown(); return; }
         var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AdElementsFree");
         log = new(Path.Combine(directory, "Logs"));
         log.Write("Ad Elements Free started");
@@ -34,7 +34,7 @@ public partial class App : Application
             providers.Add(new KookProvider(directory, log));
             window = new(providers, ToggleAsync);
             MainWindow = window;
-            tray = new(OpenWindow, ExitAsync);
+            tray = new(OpenWindow, ExitAsync, () => { OpenWindow(); window.ShowSettings(); });
             foreach (var provider in providers)
                 await provider.SetEnabledAsync(settings.Providers.GetValueOrDefault(provider.Id));
         }

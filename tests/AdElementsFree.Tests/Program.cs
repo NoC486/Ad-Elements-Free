@@ -51,4 +51,5 @@ using (var listener = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Lo
     Reject(() => KookIdentity.ValidateOwner(port, new()), "Reject foreign port without process access");
 }
 await CdpChecks.RunAsync(Check);
+await SettingsChecks.RunAsync(Check);
 Console.WriteLine($"{count} checks passed.");

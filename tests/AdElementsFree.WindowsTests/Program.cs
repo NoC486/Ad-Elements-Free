@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Controls;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using AdElementsFree.Updates;
 using AdElementsFree.Core;
 using AdElementsFree.Logging;
 using AdElementsFree.Settings;
@@ -76,9 +81,27 @@ internal static class Program
         using (var output = File.Create(Path.Combine(AppContext.BaseDirectory, "window-smoke.png"))) encoder.Save(output);
         window.Close();
         Check(!window.IsVisible, "Window closes to tray");
+        using var updateClient = new HttpClient(new UpdateHandler());
+        var settings = new AdElementsFree.UI.SettingsWindow(new StartupRegistration(Environment.ProcessPath!, @"Software\AdElementsFree.Tests\ReadOnlyPreview"), new UpdateChecker(updateClient));
+        settings.Show(); settings.UpdateLayout();
+        ((Button)settings.FindName("CheckButton")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        Check(((TextBlock)settings.FindName("UpdateStatus")).Text.Contains("v9.0.0") &&
+            ((TextBlock)settings.FindName("ReleaseLinkText")).Visibility == Visibility.Visible,
+            "Manual update button displays newer release link");
+        var settingsBitmap = new RenderTargetBitmap((int)settings.ActualWidth, (int)settings.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+        settingsBitmap.Render(settings);
+        var settingsEncoder = new PngBitmapEncoder(); settingsEncoder.Frames.Add(BitmapFrame.Create(settingsBitmap));
+        using (var output = File.Create(Path.Combine(AppContext.BaseDirectory, "settings-smoke.png"))) settingsEncoder.Save(output);
+        Check(settings.IsVisible, "Settings window renders");
+        settings.Close();
         tray.Dispose(); tray.Dispose();
         application.Shutdown();
         Console.WriteLine("PASS WPF window render, tray creation and safe disposal");
+    }
+    private sealed class UpdateHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken token) =>
+            Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("{\"tag_name\":\"v9.0.0\",\"draft\":false,\"prerelease\":false}") });
     }
     private sealed class FakeProvider : IAdProvider
     {

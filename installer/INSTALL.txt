@@ -11,6 +11,8 @@ Alternatively choose current-user installation without elevation.
 This mode defaults to your user Programs folder. Choose a writable location.
 Both modes allow changing the installation directory.
 No Windows service, driver or startup entry is installed.
+Startup is optional and off by default. Enable it later in Settings.
+Settings also includes a manual update check using this project's GitHub releases.
 
 After installation, launch the app from its shortcut with normal permissions.
 Find Ad Elements Free in the system tray (including hidden icons).
@@ -20,7 +22,7 @@ using its configured shortcut when needed.
 
 Before upgrading: exit Ad Elements Free using its tray menu.
 Use the same installation mode and folder as the existing version.
-Before uninstalling: turn OFF all client switches to restore shortcuts,
+Before uninstalling: disable startup in Settings and turn OFF all client switches to restore shortcuts,
 then exit the app. Existing settings and recovery records are kept.
 
 License: GPL-3.0-only. See LICENSE in the installation directory.
@@ -34,5 +36,6 @@ Corresponding source: https://github.com/NoC486/Ad-Elements-Free
 程序默认驻留系统托盘，请展开隐藏图标并打开主窗口，启用需要管理的客户端。
 如果目标客户端已经运行，请根据状态提示，必要时退出客户端并从已配置的快捷方式重新启动。
 升级前请从托盘退出本程序，并选择与旧版一致的安装方式和目录。
-卸载前请先关闭所有客户端开关以恢复快捷方式，再退出程序。
+可在主窗口或托盘菜单的“设置”中开启开机自启（默认关闭），或手动检查更新。
+卸载前请先在设置中关闭开机自启，并关闭所有客户端开关以恢复快捷方式，再退出程序。
 卸载会保留个人设置和恢复记录，不会修改任何目标客户端的安装文件。

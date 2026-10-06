@@ -1,10 +1,10 @@
 .mixed-ad-carousel-wrapper,
 .khj-entry-tag,
+.buff-persona-tips,
 .audio-center-promotion,
 #icon-server-search,
 div.kook-tootip.kook-tootip-text-align-left.kook-tootip-text-wrap-break.shop-icon-tooltip-big,
-.chuanyu-modal-container.kaihei-modal-animate,
 .discover-corner-ad-patch,
-.buff-persona-tips {
+.chuanyu-modal-container.kaihei-modal-animate:not(.dialog-confirm-mask) {
     display: none !important;
 }

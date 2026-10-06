@@ -20,7 +20,7 @@ Windows 集成测试会短暂创建窗口和托盘，测试快捷方式仅位于
 4. 在 `App.xaml.cs` 的注册入口添加实例；不要将特定客户端逻辑加入通用 UI、托盘或设置代码。
 5. 补充身份拒绝、恢复和取消相关测试，并记录真实客户端版本及验证结果。
 
-KOOK 的 CSS 位于 `src/AdElementsFree/Providers/KOOK/Rules/style.css`。只改变选择器时仍需检查实际页面，尤其是 `nth-child` 等依赖 DOM 顺序的规则。
+各客户端的 CSS 分别位于 `src/AdElementsFree/Providers/客户端名称/Rules/`，例如其中的 `style.css`。修改时只调整对应客户端目录中的规则；即使只改变选择器，也需检查实际页面，尤其是 `nth-child` 等依赖 DOM 顺序的规则。
 
 ## 必须遵守的边界
 

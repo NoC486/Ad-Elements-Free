@@ -24,10 +24,15 @@ public static class KookRules
             window.__aef_kook_rules_loaded = true;
             return true;
           };
+          if (apply()) return true;
+          // At document creation the head may not exist yet. Queue once, without a timer.
           if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', apply, {once:true}); return false;
+            if (window.__aef_kook_pending) document.removeEventListener('DOMContentLoaded', window.__aef_kook_pending);
+            window.__aef_kook_pending = () => { delete window.__aef_kook_pending; apply(); };
+            document.addEventListener('DOMContentLoaded', window.__aef_kook_pending, {once:true});
+            return true;
           }
-          return apply();
+          return false;
         })()
         """;
     }
@@ -35,6 +40,8 @@ public static class KookRules
         (() => {
           const expected = new URL({{JsonSerializer.Serialize(pageUrl)}});
           if (location.protocol !== expected.protocol || location.host !== expected.host || location.pathname !== expected.pathname) return;
+          if (window.__aef_kook_pending) document.removeEventListener('DOMContentLoaded', window.__aef_kook_pending);
+          delete window.__aef_kook_pending;
           document.getElementById('{{StyleId}}')?.remove(); delete window.__aef_kook_rules_loaded;
         })()
         """;

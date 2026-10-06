@@ -39,7 +39,14 @@ public static class KookIdentity
         }
         return false;
     }
-    public static bool IsSocket(string url, int port) => Uri.TryCreate(url, UriKind.Absolute, out var uri)
+    public static bool IsBrowserSocket(string url, int port) => IsDebugSocket(url, port, "/devtools/browser/");
+    // The injected script pins origin/path, not query or fragment.
+    public static bool SameRuleScope(string first, string second) =>
+        Uri.TryCreate(first, UriKind.Absolute, out var a) && Uri.TryCreate(second, UriKind.Absolute, out var b)
+        && a.Scheme == b.Scheme && a.Host == b.Host && a.Port == b.Port && a.AbsolutePath == b.AbsolutePath;
+    public static bool IsSocket(string url, int port) => IsDebugSocket(url, port, "/devtools/page/");
+    private static bool IsDebugSocket(string url, int port, string path) => Uri.TryCreate(url, UriKind.Absolute, out var uri)
         && uri.Scheme == "ws" && uri.Host == "127.0.0.1" && uri.Port == port && uri.UserInfo.Length == 0
-        && uri.AbsolutePath.StartsWith("/devtools/page/", StringComparison.Ordinal) && uri.Query.Length == 0 && uri.Fragment.Length == 0;
+        && uri.AbsolutePath.StartsWith(path, StringComparison.Ordinal) && uri.AbsolutePath.Length > path.Length
+        && uri.Query.Length == 0 && uri.Fragment.Length == 0;
 }

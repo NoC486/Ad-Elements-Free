@@ -26,6 +26,11 @@ Check(WindowsArguments.RemoveOwnedPort(edited, original, applied, 9222).Contains
 Check(WindowsArguments.RemoveOwnedPort("--remote-debugging-port=9000", original, applied, 9222) == "--remote-debugging-port=9000", "Preserve changed port");
 Check(WindowsArguments.Parse("\"a b\" c").Select(t => t.Value).SequenceEqual(new[] { "a b", "c" }), "Tokenize quoted spaces");
 Check(KookIdentity.IsSocket("ws://127.0.0.1:9222/devtools/page/abc", 9222), "Loopback socket");
+Check(KookIdentity.IsBrowserSocket("ws://127.0.0.1:9222/devtools/browser/abc", 9222), "Verified loopback browser event socket");
+Check(KookIdentity.SameRuleScope("http://localhost:5888/app/discover?a=1", "http://localhost:5888/app/discover#home"), "Query and fragment changes do not require duplicate registration");
+Check(!KookIdentity.SameRuleScope("http://localhost:5888/app/discover", "http://localhost:5888/app/home"), "Changed path needs a newly guarded rule");
+foreach (var socket in new[] { "ws://evil.test:9222/devtools/browser/abc", "ws://127.0.0.1:9999/devtools/browser/abc", "ws://user@127.0.0.1:9222/devtools/browser/abc", "ws://127.0.0.1:9222/devtools/page/abc", "ws://127.0.0.1:9222/devtools/browser/" })
+    Check(!KookIdentity.IsBrowserSocket(socket, 9222), "Reject untrusted browser event socket " + socket);
 foreach (var url in new[] { "ws://localhost:9222/devtools/page/abc", "ws://evil.test:9222/devtools/page/abc", "ws://127.0.0.1:9999/devtools/page/abc", "ws://user@127.0.0.1:9222/devtools/page/abc" })
     Check(!KookIdentity.IsSocket(url, 9222), "Reject untrusted socket " + url);
 Check(KookIdentity.IsPage("https://www.kookapp.cn/app/main", "C:\\KOOK\\KOOK.exe"), "KOOK web page");

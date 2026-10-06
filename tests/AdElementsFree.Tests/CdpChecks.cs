@@ -55,10 +55,15 @@ internal static class CdpChecks
             }
         }, deadline.Token);
         await using var connection = new CdpConnection();
+        string? eventMethod = null;
+        var closed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        connection.EventReceived += message => eventMethod = message.GetProperty("method").GetString();
+        connection.Closed += () => closed.TrySetResult(!connection.Alive);
         await connection.ConnectAsync(new Uri($"ws://127.0.0.1:{port}/devtools/page/test"), deadline.Token);
         var result = await connection.CallAsync("Page.addScriptToEvaluateOnNewDocument", new { source = "test" }, deadline.Token);
         check(result.GetProperty("identifier").GetString() == "registered", "CDP matches replies across events and fragmented frames");
         check(originAbsent, "Native client sends no Origin header");
+        check(eventMethod == "Page.testEvent", "CDP events reach subscriber independently of replies");
         for (int i = 0; i < 2; i++)
         {
             try { await connection.CallAsync("Runtime.evaluate", new { expression = "test" }, deadline.Token); throw new Exception("Expected CDP failure"); }
@@ -67,5 +72,6 @@ internal static class CdpChecks
         try { await connection.CallAsync("Page.getFrameTree", new { }, deadline.Token); throw new Exception("Expected disconnect"); }
         catch (IOException) { check(true, "CDP disconnect releases pending request"); }
         await server;
+        check(await closed.Task.WaitAsync(deadline.Token), "CDP disconnect wakes event-driven monitoring");
     }
 }

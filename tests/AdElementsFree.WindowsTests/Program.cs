@@ -16,12 +16,22 @@ using AdElementsFree.Logging;
 using AdElementsFree.Settings;
 using AdElementsFree.Shortcuts;
 using AdElementsFree.Tray;
+using AdElementsFree.Monitoring;
+using System.Diagnostics;
 
 internal static class Program
 {
     [STAThread]
-    private static int Main()
+    private static int Main(string[] args)
     {
+        if (args.Length == 1 && args[0] == "--event-test-child")
+        {
+            var childApp = new Application();
+            var childWindow = new Window { Width = 100, Height = 100, Left = -10000, Top = -10000, ShowInTaskbar = false, ShowActivated = false };
+            var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(800) };
+            timer.Tick += (_, _) => { timer.Stop(); childApp.Shutdown(); };
+            timer.Start(); childApp.Run(childWindow); return 0;
+        }
         try { Run(); return 0; }
         catch (Exception ex) { Console.Error.WriteLine(ex); return 1; }
     }
@@ -29,6 +39,17 @@ internal static class Program
     { if (!condition) throw new Exception(name); Console.WriteLine("PASS " + name); }
     private static void Run()
     {
+        var notified = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        string testExecutable = Path.Combine(AppContext.BaseDirectory, "AdElementsFree.WindowsTests.exe");
+        using (var events = new WindowProcessEvents("AdElementsFree.WindowsTests", () => notified.TrySetResult(true)))
+        {
+            using var child = Process.Start(new ProcessStartInfo(testExecutable, "--event-test-child") { UseShellExecute = false, WindowStyle = ProcessWindowStyle.Hidden })!;
+            Check(notified.Task.Wait(TimeSpan.FromSeconds(10)), "Windows window event detects another process without WMI or polling");
+            child.WaitForExit(5000);
+        }
+        MonitorChecks.RunAsync(Check).GetAwaiter().GetResult();
+        File.WriteAllText(Path.Combine(AppContext.BaseDirectory, "rule-script.js"), AdElementsFree.Providers.KOOK.KookRules.Build("http://localhost:5888/app/discover"));
+        File.WriteAllText(Path.Combine(AppContext.BaseDirectory, "rule-remove.js"), AdElementsFree.Providers.KOOK.KookRules.Remove("http://localhost:5888/app/discover"));
         string root = Path.Combine(AppContext.BaseDirectory, "isolated-" + Guid.NewGuid());
         Directory.CreateDirectory(root);
         object shell = Activator.CreateInstance(Type.GetTypeFromProgID("WScript.Shell", true)!)!;

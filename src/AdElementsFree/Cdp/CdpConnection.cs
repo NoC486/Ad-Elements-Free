@@ -12,12 +12,16 @@ public sealed class CdpConnection : IAsyncDisposable
     private readonly SemaphoreSlim sendGate = new(1);
     private Task? reader;
     private int sequence;
-    public bool Alive => socket.State == WebSocketState.Open && reader is { IsCompleted: false };
+    private int ended;
+    public bool Alive => Volatile.Read(ref ended) == 0 && socket.State == WebSocketState.Open && reader is { IsCompleted: false };
+    public event Action<JsonElement>? EventReceived;
+    public event Action? Closed;
 
     public async Task ConnectAsync(Uri uri, CancellationToken ct)
     {
         // No Origin header and no proxy. Native CDP clients need no wildcard origin switch.
         socket.Options.Proxy = null;
+        socket.Options.KeepAliveInterval = Timeout.InfiniteTimeSpan;
         await socket.ConnectAsync(uri, ct);
         reader = ReadAsync();
     }
@@ -61,13 +65,16 @@ public sealed class CdpConnection : IAsyncDisposable
                 using var document = JsonDocument.Parse(data.ToArray());
                 if (document.RootElement.TryGetProperty("id", out var id) && pending.TryGetValue(id.GetInt32(), out var completion))
                     completion.TrySetResult(document.RootElement.Clone());
-                // Other events are discarded, never logged or persisted.
+                else if (document.RootElement.TryGetProperty("method", out _))
+                    EventReceived?.Invoke(document.RootElement.Clone());
             }
         }
         catch (Exception) { /* Malformed protocol data terminates only this connection. */ }
         finally
         {
+            Interlocked.Exchange(ref ended, 1);
             foreach (var request in pending.Values) request.TrySetException(new IOException("CDP 连接已关闭。"));
+            Closed?.Invoke();
         }
     }
     public async ValueTask DisposeAsync()

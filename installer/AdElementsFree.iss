@@ -55,6 +55,11 @@ Name: "{autodesktop}\{#AppName}"; Filename: "{app}\AdElementsFree.exe"; Tasks: d
 [Run]
 Filename: "{app}\AdElementsFree.exe"; Parameters: "--show-window"; Flags: nowait skipifsilent runasoriginaluser; Tasks: launchnow
 
+#ifdef TestBuild
+[UninstallDelete]
+Type: files; Name: "{app}\Rules\KOOK\style.css.bak"
+#endif
+
 [Code]
 function GetInstallDriveType(RootPath: String): Cardinal;
   external 'GetDriveTypeW@kernel32.dll stdcall';

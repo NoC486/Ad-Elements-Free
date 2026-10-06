@@ -1,0 +1,21 @@
+<Window x:Class="AdElementsFree.UI.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Ad Elements Free" Width="620" Height="400"
+ MinWidth="480" MinHeight="340" WindowStartupLocation="CenterScreen" Background="#F5F6F8"
+ Icon="pack://application:,,,/AdElementsFree;component/Assets/App.ico">
+ <Grid Margin="28">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <StackPanel><TextBlock Text="Ad Elements Free" FontSize="27" FontWeight="SemiBold"/>
+   <TextBlock Text="桌面应用广告元素管理" Margin="0,6,0,22" Foreground="#666666"/></StackPanel>
+  <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+   <ItemsControl x:Name="ProviderList"><ItemsControl.ItemTemplate><DataTemplate>
+    <Border Background="White" BorderBrush="#E0E3E9" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,12">
+     <StackPanel><TextBlock Text="{Binding Name}" FontSize="20" FontWeight="SemiBold"/>
+      <CheckBox Content="启用广告元素隐藏" IsChecked="{Binding Enabled, Mode=OneWay}" Tag="{Binding}" Click="ToggleProvider" Margin="0,16,0,12"/>
+      <TextBlock Text="{Binding Status}" TextWrapping="Wrap" Foreground="#454B55" LineHeight="23"/>
+     </StackPanel>
+    </Border>
+   </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+  </ScrollViewer>
+  <TextBlock Grid.Row="2" Text="关闭窗口后仍在托盘运行。请通过托盘菜单退出。" Foreground="#777777" Margin="0,16,0,0" TextWrapping="Wrap"/>
+ </Grid>
+</Window>

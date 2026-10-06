@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0-windows</TargetFramework></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../src/AdElementsFree/Shortcuts/WindowsArguments.cs" Link="WindowsArguments.cs" />
+    <Compile Include="../../src/AdElementsFree/Settings/JsonStore.cs" Link="JsonStore.cs" />
+    <Compile Include="../../src/AdElementsFree/Monitoring/*.cs" Link="Monitoring/%(Filename).cs" />
+    <Compile Include="../../src/AdElementsFree/Providers/KOOK/KookIdentity.cs" Link="KookIdentity.cs" />
+    <Compile Include="../../src/AdElementsFree/Cdp/CdpConnection.cs" Link="CdpConnection.cs" />
+  </ItemGroup>
+</Project>

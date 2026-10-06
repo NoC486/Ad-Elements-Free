@@ -3,6 +3,7 @@
 .audio-center-promotion,
 #icon-server-search,
 #discover-page > div.discover-content-wrapper:last-child > div.discover-content.thin-scroll-bar:last-child > div.discover-corner-ad-patch.discover-corner-ad-patch--collapsed:last-child,
-div.kook-tootip.kook-tootip-text-align-left.kook-tootip-text-wrap-break.shop-icon-tooltip-big {
+div.kook-tootip.kook-tootip-text-align-left.kook-tootip-text-wrap-break.shop-icon-tooltip-big,
+.chuanyu-modal-container.kaihei-modal-animate {
     display: none !important;
 }

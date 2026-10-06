@@ -15,12 +15,14 @@ Windows 集成测试会短暂创建窗口和托盘，测试快捷方式仅位于
 ## 新增客户端
 
 1. 在 `src/AdElementsFree/Providers/客户端名称/` 新增实现，遵循 `Core/IAdProvider.cs`。
-2. 将 CSS 等静态规则放在该 Provider 的 `Rules/` 中；写明来源及授权。
+2. 将 CSS 放在 `src/AdElementsFree/Rules/客户端名称/style.css`，并在 `RuleFiles.Clients` 注册同名目录；写明来源及授权。
 3. 由 Provider 决定进程识别、页面白名单、端口、规则和启停行为。
 4. 在 `App.xaml.cs` 的注册入口添加实例；不要将特定客户端逻辑加入通用 UI、托盘或设置代码。
 5. 补充身份拒绝、恢复和取消相关测试，并记录真实客户端版本及验证结果。
 
-各客户端的 CSS 分别位于 `src/AdElementsFree/Providers/客户端名称/Rules/`，例如其中的 `style.css`。修改时只调整对应客户端目录中的规则；即使只改变选择器，也需检查实际页面，尤其是 `nth-child` 等依赖 DOM 顺序的规则。
+各客户端的 CSS 分别位于 `src/AdElementsFree/Rules/客户端名称/style.css`，构建后按相同目录结构复制到程序旁。只更新现有客户端规则时，将 CSS 提交到 `main` 即可，用户通过设置中的“同步最新规则”获取，不必改变软件版本。新增客户端 Provider 则需要发布新软件版本。
+
+规则应使用标准 CSS；浏览器过滤器格式中的域名和 `##` 前缀不属于 CSS，应转换为选择器及样式声明。即使只改变选择器，也需检查实际页面，尤其是依赖 DOM 顺序的规则。同步时先解析一个提交 SHA，再从该提交下载所有已注册客户端规则，避免混用不同提交的文件。
 
 ## 必须遵守的边界
 

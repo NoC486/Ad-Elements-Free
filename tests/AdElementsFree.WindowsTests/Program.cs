@@ -88,6 +88,8 @@ internal static class Program
         Check(((TextBlock)settings.FindName("UpdateStatus")).Text.Contains("v9.0.0") &&
             ((TextBlock)settings.FindName("ReleaseLinkText")).Visibility == Visibility.Visible,
             "Manual update button displays newer release link");
+        Check(((Button)settings.FindName("SyncButton")).IsEnabled, "Settings includes manual rule sync button");
+        settings.UpdateLayout();
         var settingsBitmap = new RenderTargetBitmap((int)settings.ActualWidth, (int)settings.ActualHeight, 96, 96, PixelFormats.Pbgra32);
         settingsBitmap.Render(settings);
         var settingsEncoder = new PngBitmapEncoder(); settingsEncoder.Frames.Add(BitmapFrame.Create(settingsBitmap));

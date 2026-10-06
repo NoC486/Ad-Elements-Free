@@ -1,10 +1,10 @@
 # 上游来源
 
-`src/AdElementsFree/Providers/KOOK/Rules/style.css` 来自用户指定的
+初始规则来自用户指定的
 https://github.com/NoC486/OKKO/blob/main/style.css
 
 读取日期：2026-10-06。Git blob SHA：`c393594998195e9bbba15b6e05d193cf494b4a21`。
-作者/仓库所有者：NoC486。规则正文保留原内容。
+作者/仓库所有者：NoC486。自 v0.3.0 起，规则位于 `src/AdElementsFree/Rules/KOOK/style.css`，已由 NoC486 在 2026-10-06 提供的六条新规则替换，转换为标准 CSS 隐藏声明；不再声称正文与初始上游文件一致。
 
 实现设计参考 `OKKO_Advanced.py`（blob SHA `9a51ee9e6e2c045180d8f7d90909c82212340c03`），未复制旧程序整体结构或 Python 实现。
 

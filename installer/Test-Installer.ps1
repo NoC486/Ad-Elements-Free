@@ -1,4 +1,4 @@
-param([Parameter(Mandatory)][string]$Setup, [switch]$AllUsers)
+param([Parameter(Mandatory)][string]$Setup, [switch]$AllUsers, [switch]$SyncRules)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 [xml]$project = Get-Content -LiteralPath (Join-Path $root 'src\AdElementsFree\AdElementsFree.csproj')
@@ -38,6 +38,20 @@ try {
 } finally { $reader.Dispose() }
 if ((Get-Item -LiteralPath $exe).VersionInfo.FileVersion -ne "$version.0") { throw 'Wrong application version.' }
 Write-Output "PASS Installed application is Windows x64 version $version"
+if ($SyncRules) {
+    # Helper exits before singleton/provider initialization; no target clients or user settings are touched.
+    $helperOptions = @{ FilePath = $exe; ArgumentList = '--sync-rules-elevated'; WindowStyle = 'Hidden'; Wait = $true; PassThru = $true }
+    if ($AllUsers) { $helperOptions.Verb = 'RunAs' }
+    $helper = Start-Process @helperOptions
+    if ($helper.ExitCode -ne 0) { throw 'Isolated online rules sync failed.' }
+    $rule = Join-Path $installDir 'Rules\KOOK\style.css'
+    $expectedRule = Join-Path $root 'src\AdElementsFree\Rules\KOOK\style.css'
+    if (-not (Test-Path -LiteralPath ($rule + '.bak')) -or
+        (Get-FileHash -LiteralPath $rule).Hash -ne (Get-FileHash -LiteralPath $expectedRule).Hash) {
+        throw 'Synced CSS does not match the published rules or backup is missing.'
+    }
+    Write-Output 'PASS Installed sync helper downloads latest CSS and writes backup without starting providers'
+}
 $uninstaller = Join-Path $installDir 'unins000.exe'
 $process = Start-Process -FilePath $uninstaller -ArgumentList @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART',('/LOG="' + (Join-Path $testRoot 'uninstall.log') + '"')) -WindowStyle Hidden -Wait -PassThru
 if ($process.ExitCode -ne 0) { throw "Uninstall failed: $($process.ExitCode)" }

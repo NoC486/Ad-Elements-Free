@@ -4,6 +4,7 @@ using AdElementsFree.Logging;
 using AdElementsFree.Providers.KOOK;
 using AdElementsFree.Settings;
 using AdElementsFree.Tray;
+using AdElementsFree.Rules;
 
 namespace AdElementsFree;
 
@@ -21,6 +22,12 @@ public partial class App : Application
     protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        if (e.Args.Length == 1 && e.Args[0] == "--sync-rules-elevated")
+        {
+            try { await new RuleSynchronizer().SyncAsync(AppContext.BaseDirectory); Shutdown(0); }
+            catch { MessageBox.Show("规则同步失败，请检查 GitHub 连接和规则目录权限。", "Ad Elements Free"); Shutdown(1); }
+            return;
+        }
         singleton = new Mutex(true, "Local\\AdElementsFree", out bool first);
         if (!first) { if (!e.Args.Contains("--startup")) MessageBox.Show("Ad Elements Free 已在运行，请从系统托盘打开。", "Ad Elements Free"); Shutdown(); return; }
         var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AdElementsFree");
@@ -37,6 +44,7 @@ public partial class App : Application
             tray = new(OpenWindow, ExitAsync, () => { OpenWindow(); window.ShowSettings(); });
             foreach (var provider in providers)
                 await provider.SetEnabledAsync(settings.Providers.GetValueOrDefault(provider.Id));
+            if (e.Args.Contains("--show-window")) OpenWindow();
         }
         catch (Exception ex)
         {

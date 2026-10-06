@@ -8,16 +8,16 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\App.ico</ApplicationIcon>
     <AssemblyName>AdElementsFree</AssemblyName>
-    <Version>0.2.1</Version>
-    <AssemblyVersion>0.2.1.0</AssemblyVersion>
-    <FileVersion>0.2.1.0</FileVersion>
+    <Version>0.3.0</Version>
+    <AssemblyVersion>0.3.0.0</AssemblyVersion>
+    <FileVersion>0.3.0.0</FileVersion>
     <Authors>NoC486</Authors>
     <Copyright>Copyright (C) 2026 NoC486</Copyright>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/NoC486/Ad-Elements-Free</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
-  <ItemGroup><EmbeddedResource Include="Providers/KOOK/Rules/style.css" /></ItemGroup>
+  <ItemGroup><None Update="Rules/**/*.css" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" /></ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\App.ico" />
     <EmbeddedResource Include="Assets\App.ico" LogicalName="AdElementsFree.Assets.App.ico" />

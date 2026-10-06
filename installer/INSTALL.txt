@@ -3,7 +3,7 @@
 Windows 10/11 x64. The .NET 8 Desktop Runtime is included.
 
 Choose installation for all users to install into Program Files.
-Windows requests administrator permission for installation only.
+Windows requests administrator permission to install into protected folders.
 The default is D:\Program Files\Ad Elements Free, then other fixed non-C drives.
 If none exists, the Windows Program Files directory is used.
 
@@ -14,7 +14,11 @@ No Windows service, driver or startup entry is installed.
 Startup is optional and off by default. Enable it later in Settings.
 Settings also includes a manual update check using this project's GitHub releases.
 
-After installation, launch the app from its shortcut with normal permissions.
+Launch immediately is checked by default; creating a desktop shortcut is optional and unchecked.
+The app opens after installation if Launch immediately is selected.
+Each client has its own Rules/client-name/style.css beside the app.
+Use Settings to sync the latest CSS from the project repository without upgrading the app.
+Sync replaces local edits, saves a .bak backup, and may request Windows permission for protected folders.
 Find Ad Elements Free in the system tray (including hidden icons).
 Open its window and enable the supported clients you want to manage.
 If a client is already running, follow the status prompt to restart it
@@ -32,7 +36,9 @@ Corresponding source: https://github.com/NoC486/Ad-Elements-Free
 安装到 Program Files 等受保护目录时，请选择“为所有用户安装”，并允许 Windows 的安装权限请求。
 默认优先 D:\Program Files\Ad Elements Free，其次其他非 C 盘固定磁盘。
 如果选择“仅为当前用户安装”，无需提权，默认使用当前用户目录；请选择有写入权限的位置。
-两种安装方式均允许修改目录。安装完成后，请从快捷方式以普通权限启动程序。
+两种安装方式均允许修改目录。“立即运行”默认勾选，“创建桌面快捷方式”默认不勾选。
+每个客户端的 CSS 位于程序目录 Rules/客户端名称/style.css，可在设置中同步最新规则，无需升级程序版本。
+同步会覆盖本地修改并保存 .bak 备份；受保护目录需要 Windows 授权。
 程序默认驻留系统托盘，请展开隐藏图标并打开主窗口，启用需要管理的客户端。
 如果目标客户端已经运行，请根据状态提示，必要时退出客户端并从已配置的快捷方式重新启动。
 升级前请从托盘退出本程序，并选择与旧版一致的安装方式和目录。

@@ -58,4 +58,5 @@ using (var listener = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Lo
 }
 await CdpChecks.RunAsync(Check);
 await SettingsChecks.RunAsync(Check);
+await RuleChecks.RunAsync(Check);
 Console.WriteLine($"{count} checks passed.");

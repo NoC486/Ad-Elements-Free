@@ -13,9 +13,11 @@ public partial class MainWindow : Window
 {
     private readonly Func<IAdProvider, bool, Task> toggle;
     private SettingsWindow? settingsWindow;
+    private readonly IReadOnlyList<IAdProvider> providers;
     public MainWindow(IReadOnlyList<IAdProvider> providers, Func<IAdProvider, bool, Task> toggle)
     {
         InitializeComponent(); this.toggle = toggle;
+        this.providers = providers;
         ProviderList.ItemsSource = providers;
         VersionLabel.Text = $"v{UpdateChecker.CurrentVersion}";
         foreach (var provider in providers) provider.Changed += Refresh;
@@ -26,11 +28,21 @@ public partial class MainWindow : Window
         if (settingsWindow != null) { settingsWindow.Activate(); return; }
         try
         {
-            settingsWindow = new(new StartupRegistration(Environment.ProcessPath!)) { Owner = this };
+            settingsWindow = new(new StartupRegistration(Environment.ProcessPath!), reloadRules: ReloadRulesAsync) { Owner = this };
             settingsWindow.Closed += (_, _) => settingsWindow = null;
             settingsWindow.Show();
         }
         catch { MessageBox.Show(this, "无法打开设置，请检查程序所在路径与当前用户权限。", "Ad Elements Free"); }
+    }
+    private async Task ReloadRulesAsync()
+    {
+        ProviderList.IsEnabled = false;
+        try
+        {
+            foreach (var provider in providers)
+                if (provider.Enabled) await provider.SetEnabledAsync(true);
+        }
+        finally { ProviderList.IsEnabled = true; }
     }
     private void OpenSettings(object sender, RoutedEventArgs e) => ShowSettings();
     private void NavigateLink(object sender, RequestNavigateEventArgs e)

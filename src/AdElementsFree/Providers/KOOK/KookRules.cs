@@ -1,4 +1,4 @@
-using System.Reflection;
+using AdElementsFree.Rules;
 using System.Text.Json;
 
 namespace AdElementsFree.Providers.KOOK;
@@ -8,9 +8,7 @@ public static class KookRules
     public const string StyleId = "ad-elements-free-kook";
     public static string Build(string pageUrl)
     {
-        using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("AdElementsFree.Providers.KOOK.Rules.style.css")!;
-        using var reader = new StreamReader(stream);
-        var css = JsonSerializer.Serialize(reader.ReadToEnd());
+        var css = JsonSerializer.Serialize(RuleFiles.Read("KOOK"));
         // Every execution (including reloads and child frames) checks the pinned origin/path.
         return $$"""
         (() => {

@@ -1,5 +1,5 @@
-#ifndef AppVersion
-  #define AppVersion "0.2.1"
+﻿#ifndef AppVersion
+  #define AppVersion "0.3.0"
 #endif
 #define AppName "Ad Elements Free"
 #define AppId "AdElementsFree.NoC486"
@@ -22,6 +22,7 @@ DefaultDirName={code:GetDefaultInstallDir}
 DisableDirPage=no
 DefaultGroupName={#AppName}
 DisableProgramGroupPage=yes
+UsePreviousTasks=no
 PrivilegesRequired=admin
 PrivilegesRequiredOverridesAllowed=dialog
 ArchitecturesAllowed=x64compatible
@@ -40,7 +41,8 @@ OutputDir=..\artifacts\release\{#AppVersion}
 OutputBaseFilename=Ad-Elements-Free-{#AppVersion}-win-x64-setup
 
 [Tasks]
-Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Shortcuts:"; Flags: unchecked
+Name: "launchnow"; Description: "立即运行 Ad Elements Free（安装完成后）"; GroupDescription: "安装选项："
+Name: "desktopicon"; Description: "创建桌面快捷方式"; GroupDescription: "安装选项："; Flags: unchecked
 
 [Files]
 Source: "..\artifacts\publish\{#AppVersion}\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -51,7 +53,7 @@ Name: "{group}\{#AppName}"; Filename: "{app}\AdElementsFree.exe"
 Name: "{autodesktop}\{#AppName}"; Filename: "{app}\AdElementsFree.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\AdElementsFree.exe"; Description: "Launch Ad Elements Free (system tray)"; Flags: nowait postinstall skipifsilent runasoriginaluser; Check: not IsAdmin
+Filename: "{app}\AdElementsFree.exe"; Parameters: "--show-window"; Flags: nowait skipifsilent runasoriginaluser; Tasks: launchnow
 
 [Code]
 function GetInstallDriveType(RootPath: String): Cardinal;

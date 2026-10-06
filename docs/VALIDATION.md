@@ -1,5 +1,7 @@
 # 验证记录与实机验收
 
+v0.1.1 安装回归：2026-10-06，当前用户模式在项目内自定义目录通过安装、全文件 SHA-256 校验、x64/0.1.1 版本验证和卸载；全用户模式经 Windows 权限确认，实际安装到 `D:\Program Files\Ad Elements Free Installer Test`，同样四项检查通过，测试目录程序及独立 HKLM 注册均已移除。未修改父目录 ACL，未操作正式安装或任何客户端。安装器脚本及展示说明已扫描，不含 KOOK 等特定客户端名称。主程序 manifest 保持 asInvoker，提权安装不自动启动主程序。
+
 2026-10-06：使用项目内 .NET SDK 8.0.425，在 Windows 编译。完整解决方案 Release 编译零警告零错误；33 项基础/模拟 CDP 检查和 7 项 Windows 集成检查通过。已人工查看 WPF 渲染截图。Windows 端口表读取和窗口测试在获准的桌面环境执行，沙箱内该 API 返回 Access Denied。
 
 自动验证：

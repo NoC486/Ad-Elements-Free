@@ -1,5 +1,5 @@
 #ifndef AppVersion
-  #define AppVersion "0.1.0"
+  #define AppVersion "0.1.1"
 #endif
 #define AppName "Ad Elements Free"
 #define AppId "AdElementsFree.NoC486"
@@ -22,7 +22,8 @@ DefaultDirName={code:GetDefaultInstallDir}
 DisableDirPage=no
 DefaultGroupName={#AppName}
 DisableProgramGroupPage=yes
-PrivilegesRequired=lowest
+PrivilegesRequired=admin
+PrivilegesRequiredOverridesAllowed=dialog
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 MinVersion=10.0
@@ -35,14 +36,14 @@ InfoBeforeFile=INSTALL.txt
 WizardStyle=modern
 Compression=lzma2
 SolidCompression=yes
-OutputDir=..\artifacts\release
+OutputDir=..\artifacts\release\{#AppVersion}
 OutputBaseFilename=Ad-Elements-Free-{#AppVersion}-win-x64-setup
 
 [Tasks]
 Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Shortcuts:"; Flags: unchecked
 
 [Files]
-Source: "..\artifacts\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\artifacts\publish\{#AppVersion}\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "INSTALL.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
@@ -50,7 +51,7 @@ Name: "{group}\{#AppName}"; Filename: "{app}\AdElementsFree.exe"
 Name: "{autodesktop}\{#AppName}"; Filename: "{app}\AdElementsFree.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\AdElementsFree.exe"; Description: "Launch Ad Elements Free (system tray)"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\AdElementsFree.exe"; Description: "Launch Ad Elements Free (system tray)"; Flags: nowait postinstall skipifsilent runasoriginaluser; Check: not IsAdmin
 
 [Code]
 function GetInstallDriveType(RootPath: String): Cardinal;
@@ -61,6 +62,11 @@ var
   Index: Integer;
   RootPath: String;
 begin
+  if not IsAdminInstallMode then
+  begin
+    Result := ExpandConstant('{localappdata}\Programs\{#AppName}');
+    Exit;
+  end;
   { Prefer D:, then other fixed non-C drives. Exclude removable/network drives. }
   for Index := Ord('D') to Ord('Z') do
   begin
@@ -72,7 +78,7 @@ begin
     end;
   end;
   { Computers with no secondary fixed drive still get a usable default. }
-  Result := ExpandConstant('{localappdata}\Programs\{#AppName}');
+  Result := ExpandConstant('{autopf}\{#AppName}');
 end;
 
 function InitializeUninstall(): Boolean;

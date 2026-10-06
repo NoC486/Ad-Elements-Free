@@ -34,7 +34,7 @@ dotnet publish src/AdElementsFree -c Release -r win-x64 --self-contained true -o
 
 WindowsTests 会短暂显示测试窗口和托盘，仅修改自身输出目录的测试快捷方式，不修改用户桌面快捷方式。基础测试会创建随机本机端口以验证归属检查及模拟 CDP。
 
-制作安装包见 [发布指南](docs/RELEASING.md)。64 位安装包首次安装默认优先 `D:\Program Files\Ad Elements Free`，没有 D 盘时选择其他非 C 盘固定磁盘；均不存在时回退到当前用户目录。安装或升级时可以修改为其他有写入权限的位置，不要求管理员权限；卸载前先关闭 Provider 并从托盘退出。
+制作安装包见 [发布指南](docs/RELEASING.md)。64 位安装包默认“为所有用户安装”，仅安装器申请管理员权限，首次安装优先 `D:\Program Files\Ad Elements Free`，没有 D 盘时选择其他非 C 盘固定磁盘；均不存在时使用系统 Program Files。也可选择“仅为当前用户安装”，无需提权，默认使用当前用户目录。两种模式均可修改目录。主程序仍使用普通权限；卸载前先关闭所有客户端开关并从托盘退出。
 
 ## 目录
 

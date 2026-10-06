@@ -13,4 +13,4 @@ https://github.com/NoC486/OKKO/blob/main/style.css
 
 ## 运行时组件
 
-自包含发布包包含微软 .NET / Windows Desktop Runtime。它们是第三方组件，保留发布包内各自的 LICENSE.txt、ThirdPartyNotices.txt 等声明，不将其重新许可为 GPL。根目录 LICENSE 为 Ad Elements Free 自身的 GPLv3 许可证。
+自包含发布包包含微软 .NET / Windows Desktop Runtime。它们是第三方组件，原始 LICENSE 和第三方声明保存在发布包的 `ThirdParty/` 目录内，不将其重新许可为 GPL。根目录 LICENSE 为 Ad Elements Free 自身的 GPLv3 许可证。

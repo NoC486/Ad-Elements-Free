@@ -1,0 +1,28 @@
+Ad Elements Free
+
+Windows 10/11 x64. The .NET 8 Desktop Runtime is included.
+Installs for the current user without administrator privileges.
+Defaults to D:\Program Files\Ad Elements Free, or another fixed non-C drive.
+If no secondary fixed drive exists, defaults to the current user's Programs folder.
+The destination folder can be changed during installation or upgrade.
+Choose a folder writable by your current Windows account.
+No Windows service, driver or startup entry is installed.
+
+After launch, find Ad Elements Free in the system tray (including hidden icons).
+Open its window and enable KOOK. Fully exit KOOK and restart it using a
+configured shortcut if its debugging port was not already enabled.
+
+Before upgrading: exit Ad Elements Free using its tray menu.
+Before uninstalling: turn OFF the KOOK provider first to restore shortcuts,
+then exit Ad Elements Free. Existing settings and recovery records are kept.
+
+License: GPL-3.0-only. See LICENSE in the installation directory.
+No warranty is provided. You may modify and redistribute under GPLv3.
+Corresponding source: https://github.com/NoC486/Ad-Elements-Free
+
+安装后程序默认驻留系统托盘，请展开右下角隐藏图标并打开主窗口。
+安装或升级时可修改安装目录，请选择当前用户有写入权限的位置。
+首次安装默认优先 D:\Program Files\Ad Elements Free，其次其他非 C 盘的固定磁盘；没有这些磁盘时回退到当前用户目录。
+启用 KOOK 后，如客户端已经运行，请完全退出 KOOK，再从已配置的快捷方式启动。
+升级前请从托盘退出本程序；卸载前请先关闭 KOOK 开关以恢复快捷方式，再退出程序。
+卸载会保留个人设置和快捷方式恢复记录，不会修改 KOOK 安装文件。

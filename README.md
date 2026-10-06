@@ -8,7 +8,7 @@
 
 ## 使用
 
-1. 安装 .NET 8 Desktop Runtime，运行 `AdElementsFree.exe`；或使用自包含发布目录中的程序。
+1. 从 [Releases](https://github.com/NoC486/Ad-Elements-Free/releases/latest) 下载 Windows x64 `setup.exe` 安装包，或下载 `portable.zip` 解压运行。两者均自带 .NET 8，无需另装运行时。
 2. 默认只显示系统托盘图标；单击、双击或右键菜单打开窗口。首次默认关闭，避免未经用户操作修改快捷方式。
 3. 打开 KOOK 开关。程序检查当前用户/公共桌面、当前用户/公共开始菜单中的 `.lnk`。
 4. 若 KOOK 已在运行，请完全退出 KOOK，再从已配置的快捷方式启动。程序不会强行重启 KOOK。
@@ -33,6 +33,8 @@ dotnet publish src/AdElementsFree -c Release -r win-x64 --self-contained true -o
 ```
 
 WindowsTests 会短暂显示测试窗口和托盘，仅修改自身输出目录的测试快捷方式，不修改用户桌面快捷方式。基础测试会创建随机本机端口以验证归属检查及模拟 CDP。
+
+制作安装包见 [发布指南](docs/RELEASING.md)。64 位安装包首次安装默认优先 `D:\Program Files\Ad Elements Free`，没有 D 盘时选择其他非 C 盘固定磁盘；均不存在时回退到当前用户目录。安装或升级时可以修改为其他有写入权限的位置，不要求管理员权限；卸载前先关闭 Provider 并从托盘退出。
 
 ## 目录
 

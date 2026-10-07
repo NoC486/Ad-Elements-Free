@@ -4,7 +4,6 @@
 .audio-center-promotion,
 #icon-server-search,
 div.kook-tootip.kook-tootip-text-align-left.kook-tootip-text-wrap-break.shop-icon-tooltip-big,
-.discover-corner-ad-patch,
-.chuanyu-modal-container.kaihei-modal-animate:not(.dialog-confirm-mask) {
+.discover-corner-ad-patch {
     display: none !important;
 }

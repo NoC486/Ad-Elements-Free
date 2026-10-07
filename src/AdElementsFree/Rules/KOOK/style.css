@@ -4,6 +4,7 @@
 .audio-center-promotion,
 #icon-server-search,
 div.kook-tootip.kook-tootip-text-align-left.kook-tootip-text-wrap-break.shop-icon-tooltip-big,
-.discover-corner-ad-patch {
+.discover-corner-ad-patch,
+.chuanyu-modal-container.kaihei-modal-animate:has(> .modal-body.promotion-dialog.image-hot-area.theme-abled) {
     display: none !important;
 }
